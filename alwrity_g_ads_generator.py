@@ -14,34 +14,41 @@ import google.generativeai as genai
 def main():
     # Set page configuration
     st.set_page_config(
-        page_title="Alwrity - AI Business Letter Writer (Beta)",
+        page_title="Alwrity - AI Google Ads Generator",
         layout="wide",
     )
     # Remove the extra spaces from margin top.
     st.markdown("""
         <style>
-               .block-container {
-                    padding-top: 0rem;
-                    padding-bottom: 0rem;
-                    padding-left: 1rem;
-                    padding-right: 1rem;
-                }
-        </style>
-        """, unsafe_allow_html=True)
-    st.markdown(f"""
-      <style>
-      [class="st-emotion-cache-7ym5gk ef3psqc12"]{{
-            display: inline-block;
-            padding: 5px 20px;
-            background-color: #4681f4;
-            color: #FBFFFF;
-            width: 300px;
-            height: 35px;
+        ::-webkit-scrollbar-thumb {
+            background-color: #90CAF9;
+            border-radius: 10px;
+            border: 3px solid #e1ebf9;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64B5F6;
+        }
+
+        ::-webkit-scrollbar {
+            width: 16px;
+        }
+        div.stButton > button:first-child {
+            background: #1565C0;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
             text-align: center;
             text-decoration: none;
+            display: inline-block;
             font-size: 16px;
-            border-radius: 8px;’
-      }}
+            margin: 10px 2px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            font-weight: bold;
+        }
       </style>
     """
     , unsafe_allow_html=True)
@@ -54,20 +61,26 @@ def main():
     hide_streamlit_footer = '<style>#MainMenu {visibility: hidden;} footer {visibility: hidden;}</style>'
     st.markdown(hide_streamlit_footer, unsafe_allow_html=True)
 
-    with st.expander("**PRO-TIP** - Read the instructions below.", expanded=True):
-        col1, col2, col3 = st.columns([5, 5, 5])
-        with col1:
-            product_service_name = st.text_input("Brand/Product/Service Name:")
-            call_to_action_options = ["Shop Now", "Learn More", "Sign Up", "Get a Quote", "Download", "Other"]
-            call_to_action = st.selectbox("Call to Action:", call_to_action_options)
-            if call_to_action == "Other":
-                call_to_action = st.text_input("Enter custom CTA:")
-        with col2:
-            key_benefit_usp = st.text_input("Keywords (Optional):")
-            target_audience = st.text_input("Specify Target Audience:", 
-                                                placeholder=f"Specify Target Audience to attract")
+    st.title("Ultimate AI Google Ads Generator by Alwrity")
+    st.write("Effortlessly create high-performing, optimized Google Ads with our AI-driven tool. Boost your campaign success today!")
 
-    if st.button('**Write Google Ads Copy**'):
+    with st.expander("**💡 PRO-TIP** - Read the instructions below.", expanded=True):
+        col1, col2, col3 = st.columns(3)
+        with col1:
+            product_service_name = st.text_input("🏷️ Brand/Product/Service Name:")
+        
+            call_to_action_options = ["Shop Now", "Learn More", "Sign Up", "Get a Quote", "Download", "Custom"]
+            call_to_action = st.selectbox("🔔 Call to Action:", call_to_action_options)
+            if call_to_action == "Custom":
+                call_to_action = st.text_input("🔔 Enter custom CTA:")
+        
+        with col2:
+            key_benefit_usp = st.text_input("🔑 Keywords (Optional):")
+        
+        with col3:
+            target_audience = st.text_input("🎯 Specify Target Audience:", placeholder="Specify Target Audience to attract")
+
+    if st.button('**✍️ Write Google Ads Copy**'):
         with st.status("Assigning AI professional to write your Google Ads copy..", expanded=True) as status:
             if not product_service_name or not target_audience or not key_benefit_usp:
                 st.error("🚫 Error: Enter all the details, least you can do..")
@@ -92,7 +105,7 @@ def google_ads_writer(product_service_name, call_to_action, key_benefit_usp, tar
         
         ## Instructions for AI
         
-        * Generate three compelling and concise Google Ads descriptions, each within the character limit (approximately 90 characters).
+        * Generate 5 compelling and concise Google Ads descriptions, each within the character limit (approximately 90 characters).
         * Highlight the key benefit/USP and tailor the message to the target audience.
         * Include a strong call to action (CTA) that aligns with the campaign goals.
         * Incorporate the Product/Service Name, ensuring it complements the ad copy.
@@ -132,10 +145,10 @@ def generate_text_with_exception_handling(prompt):
         genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 
         generation_config = {
-            "temperature": 1,
+            "temperature": 0.6,
             "top_p": 0.95,
             "top_k": 0,
-            "max_output_tokens": 8192,
+            "max_output_tokens": 1096,
         }
 
         safety_settings = [
